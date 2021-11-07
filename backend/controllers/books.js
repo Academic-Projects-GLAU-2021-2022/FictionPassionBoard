@@ -24,3 +24,27 @@ const getBookById = (req, res, next) => {
 
   res.json({ book }); //it refers to the complete book object
 };
+
+const createBook = (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    console.log(errors);
+    throw new HttpError("Invalid input passes, please check your data", 422);
+  }
+
+  const { title, description } = req.body;
+
+  const createdBook = {
+    id: uuid(),
+    title,
+    description,
+  };
+
+  DUMMY_BOOKS.push(createdBook);
+
+  res.status(201).json({ book: createdBook });
+};
+
+exports.getBookById = getBookById;
+exports.createBook = createBook;
