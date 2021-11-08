@@ -1,50 +1,93 @@
+const Book = require("../models/books");
 const uuid = require("uuid/v4");
+var jwt = require("jsonwebtoken");
+var expressJwt = require("express-jwt");
 const { validationResult } = require("express-validator");
 
-const HttpError = require("../models/http-error");
-
-let DUMMY_BOOKS = [
-  {
-    id: "b1",
-    title: "Let us C",
-    description: "A book for learning C Programming Concepts",
-  },
-];
-
-const getBookById = (req, res, next) => {
-  const bookId = req.params.bid; // for book id {bid refers to b1}
-
-  const book = DUMMY_BOOKS.find((b) => {
-    return b.id === bookId;
+//
+//for getting books by ID
+//
+exports.getBookById = (req, res, next, id) => {
+  Book.findById(id).exec((err, book) => {
+    if (err || !book) {
+      return res.status(400).json({
+        error: "No book was found in DB",
+      });
+    }
+    req.book = book;
+    next();
   });
-
-  if (!book) {
-    throw new HttpError("Could not find a book for the provided id.", 404);
-  }
-
-  res.json({ book }); //it refers to the complete book object
 };
 
-const createBook = (req, res, next) => {
+//
+//to get a book
+//
+exports.getBook = (req, res) => {
+  req.book.createdAt = undefined;
+  req.book.updatedAt = undefined;
+  req.book.__v = undefined;
+  res.json(req.book);
+};
+
+//
+//for adding a new book
+//
+
+exports.addBook = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors);
-    throw new HttpError("Invalid input passes, please check your data", 422);
+    return res.status(422).json({
+      error: errors.array()[0].msg,
+    });
   }
 
-  const { title, description } = req.body;
-
-  const createdBook = {
-    id: uuid(),
-    title,
-    description,
-  };
-
-  DUMMY_BOOKS.push(createdBook);
-
-  res.status(201).json({ book: createdBook });
+  const addedBook = new Book(req.body);
+  addedBook.save((err, addedBook) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        err: "NOT able to save book in DB",
+      });
+    }
+    res.json({
+      title: addedBook.title,
+      description: addedBook.description,
+      author: addedBook.author,
+      publication: addedBook.publication,
+      _id: addedBook._id,
+    });
+  });
 };
 
-exports.getBookById = getBookById;
-exports.createBook = createBook;
+//
+//Updating ratings
+//
+exports.updateRating = (req, res, id) => {
+  console.log(req.book);
+  Book.findOne({ id: req._id }, () => {
+    req.book.totalStars += req.body.stars;
+    req.book.totalReviews += 1;
+    req.book.save((err, book) => {
+      if (err || !book) {
+        console.log(err);
+        return res.status(400).json({
+          error: "Unable to update ratings",
+        });
+      }
+      res.json({ book });
+    });
+  });
+};
+
+//
+//counting ratings
+//
+exports.countRatings = (req, res, id) => {
+  var totalStars = req.book.totalStars;
+  var totalReviews = req.book.totalReviews;
+
+  var avgStars = totalStars / totalReviews;
+
+  res.json(avgStars);
+};
