@@ -2,6 +2,8 @@ require("dotenv").config();
 
 const mongoose = require("mongoose");
 
+const HttpError = require("./models/http-error");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 
@@ -22,7 +24,7 @@ mongoose
 
 app.use(bodyParser.json());
 
-app.use("/api/books", booksRoutes);
+app.use("/api", booksRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);
