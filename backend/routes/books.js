@@ -4,14 +4,30 @@ const { check } = require("express-validator");
 
 const router = express.Router();
 
-const booksControllers = require("../controllers/books");
+const {
+  getBookById,
+  getBook,
+  addBook,
+  updateRating,
+  countRatings,
+} = require("../controllers/books");
 
-router.get("/:bid", booksControllers.getBookById);
+//parameter extracter
+router.param("bookId", getBookById);
+
+//getting book
+router.get("/book/:bookId", getBook);
+
+//for updating ratings
+router.put("/book/addRating/:bookId", updateRating);
+
+//counting rating
+router.get("/bookRating/:bookId", countRatings);
 
 router.post(
-  "/",
+  "/addBook",
   [check("title").not().isEmpty(), check("description").isLength({ min: 10 })],
-  booksControllers.createBook
+  addBook
 );
 
 module.exports = router;
