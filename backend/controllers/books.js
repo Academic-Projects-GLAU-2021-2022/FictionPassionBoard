@@ -20,7 +20,7 @@ exports.getBookById = (req, res, next, id) => {
 };
 
 //
-//to get a book
+//
 //
 exports.getBook = (req, res) => {
   req.book.createdAt = undefined;
@@ -64,6 +64,8 @@ exports.addBook = (req, res, next) => {
 //Updating ratings
 //
 exports.updateRating = (req, res, id) => {
+  //req.book.totalStars += req.body.stars;
+  //req.book.totalReviews += 1;
   console.log(req.book);
   Book.findOne({ id: req._id }, () => {
     req.book.totalStars += req.body.stars;
