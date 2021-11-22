@@ -1,6 +1,6 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var bookSchema = new mongoose.Schema(
+const bookSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -11,7 +11,7 @@ var bookSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
-      maxlength: 100,
+      maxlength: 2000,
       trim: true,
     },
     author: {
@@ -24,6 +24,7 @@ var bookSchema = new mongoose.Schema(
       type: String,
       maxlength: 50,
       trim: true,
+      required: true,
     },
     totalStars: {
       type: Number,
@@ -32,6 +33,10 @@ var bookSchema = new mongoose.Schema(
     totalReviews: {
       type: Number,
       default: 5,
+    },
+    photo: {
+      data: Buffer,
+      contentType: String,
     },
   },
   { timestamps: true }
