@@ -1,7 +1,8 @@
 const Book = require("../models/books");
+const formidable = require("formidable");
+const _ = require("lodash");
+const fs = require("fs");
 const uuid = require("uuid/v4");
-var jwt = require("jsonwebtoken");
-var expressJwt = require("express-jwt");
 const { validationResult } = require("express-validator");
 
 //
@@ -20,7 +21,7 @@ exports.getBookById = (req, res, next, id) => {
 };
 
 //
-//
+//for fetching a book from db
 //
 exports.getBook = (req, res) => {
   req.book.createdAt = undefined;
@@ -34,28 +35,53 @@ exports.getBook = (req, res) => {
 //
 
 exports.addBook = (req, res, next) => {
-  const errors = validationResult(req);
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
 
-  if (!errors.isEmpty()) {
-    return res.status(422).json({
-      error: errors.array()[0].msg,
-    });
-  }
-
-  const addedBook = new Book(req.body);
-  addedBook.save((err, addedBook) => {
+  form.parse(req, (err, fields, file) => {
     if (err) {
-      console.log(err);
       return res.status(400).json({
-        err: "NOT able to save book in DB",
+        error: "problem with image",
       });
     }
-    res.json({
-      title: addedBook.title,
-      description: addedBook.description,
-      author: addedBook.author,
-      publication: addedBook.publication,
-      _id: addedBook._id,
+    //destructure the fields
+    const { title, description, author, publication } = fields;
+
+    if (!title || !description || !author || !publication) {
+      return res.status(400).json({
+        error: "Please include all fields",
+      });
+    }
+
+    let book = new Book(fields);
+
+    //handle file here
+    if (file.photo) {
+      if (file.photo.size > 3000000) {
+        //3000000 = approx. 3MB
+        return res.status(400).json({
+          error: "File size too big",
+        });
+      }
+      book.photo.data = fs.readFileSync(file.photo.path);
+      book.photo.contentType = file.photo.type;
+    }
+
+    //save to the DB
+    book.save((err, book) => {
+      if (err) {
+        return res.status(400).json({
+          error: "Saving book in DB failed",
+        });
+      }
+      //console.log(book);
+      res.json({
+        title: book.title,
+        description: book.description,
+        author: book.author,
+        publication: book.publication,
+        _id: book._id,
+      });
     });
   });
 };
