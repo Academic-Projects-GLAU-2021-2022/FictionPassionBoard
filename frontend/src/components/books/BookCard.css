@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Acme&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant:wght@300&display=swap");
+
+.book-item__modal-content {
+  padding: 0;
+}
+
+.book-item__modal-actions {
+  text-align: right;
+}
+
+.book-item__actions button,
+.book-item__actions a {
+  margin-top: 0rem;
+}
+
+.card {
+  padding: 1vw;
+}
+.bookCard__main-button {
+  text-decoration: none;
+  border: none;
+  padding: 0.5vw 0.5vw 0.5vw 0.5vw;
+  border-radius: 0.5vw;
+  background-color: rgb(70, 214, 224);
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1vw;
+}
+
+.bookCard__main-button-div {
+  text-align: center;
+}
+
+.card-body h3 {
+  text-align: center;
+  font-family: "Cormorant", serif;
+}
+
+.card-body h2 {
+  font-size: 1.9vw;
+  color: darkblue;
+  text-align: center;
+  font-family: "Zilla Slab", serif;
+}
+.bookCard__close-button {
+  margin-left: 27vw;
+}
+.bookCard__close-button button {
+  text-decoration: none;
+  border: none;
+  padding: 0.5vw;
+  margin: 0vw 1vw 0vw 1vw;
+  border-radius: 0.5vw;
+  background-color: turquoise;
+  background-color: rgb(70, 214, 224);
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1vw;
+}
+
+.book-card__stars {
+  text-align: center;
+  margin-left: 30vw;
+}
+
+.imageHelper {
+  padding: 1vw;
+}
+
+.ratingtext {
+  padding: 2vw 1vw 2vw 1vw;
+}
