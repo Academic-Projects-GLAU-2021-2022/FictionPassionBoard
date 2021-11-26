@@ -1,0 +1,14 @@
+* {
+  padding: 0px;
+  box-sizing: border-box;
+}
+.stars__main {
+  display: flex;
+}
+
+.star:hover {
+  color: #ff9529;
+}
+.star {
+  color: #a9a9a9;
+}
