@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import AddBook from "./components/admin/AddBook";
 import BooksCatelogue from "./components/books/BooksCatelogue";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./FictionPassionBoard.css";
 
 const FictionPassionBoard = () => {
   return (
-    /*<AddBook /><StarRating /><BooksCatelogue />*/
     <div>
       <Router>
         <Routes>
