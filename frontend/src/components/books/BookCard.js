@@ -76,7 +76,9 @@ const BookCard = (props) => {
               <ImageHelper book={props.book} />
             </div>
             <h3>Published by :- {props.publication}</h3>
-            <h3>{props.description}</h3>
+            <div className="cardBody-description">
+              <h3>{props.description}</h3>
+            </div>
 
             <div className="book-card__stars">
               <ViewStarRating star={countRating()} />
