@@ -12,6 +12,8 @@ const BookCard = (props) => {
   //const id = book._id;
   //console.log(cardTitle);
 
+  //console.log("bookid", props.id);
+
   const countRating = () => {
     var avgStars = props.totalStars / props.totalReviews;
     return avgStars;
@@ -95,19 +97,24 @@ const BookCard = (props) => {
           <React.Fragment>
             <div className="bookCard__close-button">
               <button onClick={cancelAddRatingHandler}>CANCEL</button>
-              <button onClick={confirmAddRatingHandler}>ADD</button>
             </div>
           </React.Fragment>
         }
       >
         <div className="ratingtext">
-          <div className="book-card__stars">
-            <UpdateStarRating />
-          </div>
           <p>
-            Do you want to proceed and add rating to this book? Please note that
-            it can't be undone thereafter.
+            <br />
+            Please note that it can't be undone thereafter. <br />
+            <br /> Do you want to proceed and add rating to this book?
+            <br />
+            <br />
           </p>
+          <div className="book-card__stars">
+            <UpdateStarRating
+              id={props.id}
+              modalCloser={cancelAddRatingHandler}
+            />
+          </div>
         </div>
       </Modal>
     </React.Fragment>

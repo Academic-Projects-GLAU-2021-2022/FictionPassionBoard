@@ -12,8 +12,10 @@ const booksRoutes = require("./routes/books");
 const app = express();
 
 //DB Connection
+//localhost -> DATABASE1
+//atlas -> DATABASE
 mongoose
-  .connect(process.env.DATABASE, {
+  .connect(process.env.DATABASE1, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -23,6 +25,21 @@ mongoose
   });
 
 app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type",
+    "Accept",
+    "Authorization"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "GET, POST, PUT, PATCH, DELETE"
+  );
+  next();
+});
 
 app.use("/api", booksRoutes);
 

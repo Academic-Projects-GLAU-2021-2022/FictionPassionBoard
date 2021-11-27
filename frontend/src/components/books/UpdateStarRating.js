@@ -6,44 +6,32 @@ import "./StarRating.css";
 const UpdateStarRating = (props) => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState("");
-  //let rating = 0;
+  //const ratingValue;
 
   const [values, setValues] = useState({
-    title: "",
-    description: "",
-    author: "",
-    publication: "",
-    totalStars: "",
-    totalReviews: "",
+    rrating: "",
   });
 
-  const { title, description, author, publication, totalReviews, totalStars } =
-    values;
+  //const { rrating } = values;
 
   const rateBook = (ratings) => {
-    var avgStars = totalStars / totalReviews;
+    //var avgStars = totalStars / totalReviews;
     //return avgStars;
-    console.log("rating", setRating(ratings));
-    setValues({ ...values, totalStars: avgStars });
-    console.log(values);
-    updateRatings()
+    console.log("rating received", ratings);
+
+    updateRatings(ratings, props.id)
       .then((data) => {
         if (data.error) {
-          setValues({ ...values });
+          //setValues({ ...values });
+          console.log("error occurred.");
         } else {
-          setValues({
-            title: "",
-            description: "",
-            author: "",
-            publication: "",
-            totalStars: "",
-            totalReviews: "",
-          });
+          props.modalCloser();
         }
       })
       .catch(() => {
         return console.log("Cannot update ratings");
       });
+    //props.modalCloser();
   };
 
   return (
@@ -62,7 +50,7 @@ const UpdateStarRating = (props) => {
               onClick={() => {
                 //setRating(ratingValue);
                 rateBook(ratingValue);
-                console.log("rating1", ratingValue);
+                //console.log("rating1", ratingValue);
               }}
             />
           </div>

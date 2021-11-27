@@ -20,18 +20,20 @@ export const getBooks = async () => {
 //
 //to count ratings
 //
-export const updateRatings = async (id, book) => {
-  return await fetch(`${API}/book/addRating/${id}`, {
+export const updateRatings = (ratings, id) => {
+  console.log("apiwala", ratings);
+  console.log("apiwalajson", JSON.stringify(ratings));
+  return fetch(`${API}/book/addRating/${id}`, {
     method: "PUT",
     headers: {
-      Accept: "application/json",
+      "Content-Type": "application/json",
     },
-    body: book,
+    body: JSON.stringify({ stars: ratings }),
   })
     .then((res) => {
       return res.json();
     })
     .catch((err) => {
-      return err;
+      return console.log(err);
     });
 };

@@ -48,8 +48,8 @@ const BooksCatelogue = ({ navigation }) => {
           <div className="bklst" key={index}>
             <BookCard
               book={book}
-              key={book.id}
-              id={book.id}
+              key={book._id}
+              id={book._id}
               image={book.imageUrl}
               title={book.title}
               description={book.description}
