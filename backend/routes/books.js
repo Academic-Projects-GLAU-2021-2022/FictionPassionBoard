@@ -9,7 +9,8 @@ const {
   getBook,
   addBook,
   updateRating,
-  countRatings,
+  photo,
+  getAllBooks,
 } = require("../controllers/books");
 
 //parameter extracter
@@ -17,17 +18,21 @@ router.param("bookId", getBookById);
 
 //getting book
 router.get("/book/:bookId", getBook);
+router.get("/book/photo/:bookId", photo);
 
 //for updating ratings
 router.put("/book/addRating/:bookId", updateRating);
 
 //counting rating
-router.get("/bookRating/:bookId", countRatings);
+//router.get("/bookRating/:bookId", countRatings);
 
 router.post(
   "/addBook",
-  [check("title").not().isEmpty(), check("description").isLength({ min: 10 })],
+  [check("title").not().isEmpty(), check("description").isLength({ min: 5 })],
   addBook
 );
+
+//listing route
+router.get("/allBooks", getAllBooks);
 
 module.exports = router;

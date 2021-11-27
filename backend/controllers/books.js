@@ -30,18 +30,27 @@ exports.getBook = (req, res) => {
   res.json(req.book);
 };
 
+//middleware
+exports.photo = (req, res, next) => {
+  if (req.book.photo.data) {
+    res.set("Content-Type", req.book.photo.contentType);
+    return res.send(req.book.photo.data);
+  }
+  next();
+};
+
 //
 //for adding a new book
 //
 
-exports.addBook = (req, res, next) => {
+exports.addBook = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
 
   form.parse(req, (err, fields, file) => {
     if (err) {
       return res.status(400).json({
-        error: "problem with image",
+        error: "Problem with image",
       });
     }
     //destructure the fields
@@ -63,6 +72,7 @@ exports.addBook = (req, res, next) => {
           error: "File size too big",
         });
       }
+
       book.photo.data = fs.readFileSync(file.photo.path);
       book.photo.contentType = file.photo.type;
     }
@@ -74,14 +84,16 @@ exports.addBook = (req, res, next) => {
           error: "Saving book in DB failed",
         });
       }
+      return;
       //console.log(book);
-      res.json({
+
+      /*res.json({
         title: book.title,
         description: book.description,
         author: book.author,
         publication: book.publication,
         _id: book._id,
-      });
+      });*/
     });
   });
 };
@@ -92,8 +104,9 @@ exports.addBook = (req, res, next) => {
 exports.updateRating = (req, res, id) => {
   //req.book.totalStars += req.body.stars;
   //req.book.totalReviews += 1;
-  console.log(req.book);
-  Book.findOne({ id: req._id }, () => {
+  //console.log(req.body.stars);
+
+  Book.findOne({ id: req.book.id }, () => {
     req.book.totalStars += req.body.stars;
     req.book.totalReviews += 1;
     req.book.save((err, book) => {
@@ -111,11 +124,37 @@ exports.updateRating = (req, res, id) => {
 //
 //counting ratings
 //
-exports.countRatings = (req, res, id) => {
+/*exports.countRatings = (req, res, id) => {
   var totalStars = req.book.totalStars;
   var totalReviews = req.book.totalReviews;
 
   var avgStars = totalStars / totalReviews;
 
   res.json(avgStars);
+};
+*/
+//
+//to get all books
+//
+
+exports.getAllBooks = (req, res) => {
+  let limit = req.query.limit ? parseInt(req.query.limit) : 8;
+  let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
+
+  Book.find()
+    .select("-photo")
+    .sort([[sortBy, "asc"]])
+    .limit(limit)
+    .exec((err, books) => {
+      if (err) {
+        return res.status(400).json({
+          error: "NO books found",
+        });
+      } else {
+        res.json(books);
+        //console.log(books);
+        return;
+      }
+      //return JSON.stringify(books);
+    });
 };
