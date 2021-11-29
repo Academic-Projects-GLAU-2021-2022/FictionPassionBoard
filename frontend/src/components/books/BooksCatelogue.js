@@ -42,25 +42,28 @@ const BooksCatelogue = ({ navigation }) => {
       <div className="top">
         <h1>Fiction Passion Board </h1>
       </div>
-
-      <div className="bottom">
-        {books.map((book, index) => (
-          <div className="bklst" key={index}>
-            <BookCard
-              book={book}
-              key={book._id}
-              id={book._id}
-              image={book.imageUrl}
-              title={book.title}
-              description={book.description}
-              author={book.author}
-              publication={book.publication}
-              totalStars={book.totalStars}
-              totalReviews={book.totalReviews}
-            />
-          </div>
-        ))}
-      </div>
+      {books.length === 0 ? (
+        <h1>No books found</h1>
+      ) : (
+        <div className="bottom">
+          {books.map((book, index) => (
+            <div className="bklst" key={index}>
+              <BookCard
+                book={book}
+                key={book._id}
+                id={book._id}
+                image={book.imageUrl}
+                title={book.title}
+                description={book.description}
+                author={book.author}
+                publication={book.publication}
+                totalStars={book.totalStars}
+                totalReviews={book.totalReviews}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
