@@ -10,8 +10,6 @@ const BooksCatelogue = ({ navigation }) => {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState(false);
 
-  //const { title, description, author, publication, _id } = books;
-
   useEffect(() => {
     loadAllBooks();
   }, []); //[JSON.stringify(books)]
@@ -21,15 +19,11 @@ const BooksCatelogue = ({ navigation }) => {
       .then((data) => {
         if (data.error) {
           setError(data.error);
-          //console.log(data.error);
         } else {
           setBooks(data);
-          //console.log("data", data);
-          //console.log("books", books);
         }
       })
       .catch((err) => {
-        //console.log(err);
         return err;
       });
   };
@@ -43,7 +37,13 @@ const BooksCatelogue = ({ navigation }) => {
         <h1>Fiction Passion Board </h1>
       </div>
       {books.length === 0 ? (
-        <h1>No books found</h1>
+        <div className="noBook">
+          <i
+            className="fa fa-exclamation-triangle"
+            style={{ color: "red" }}
+          ></i>{" "}
+          No Books Found.
+        </div>
       ) : (
         <div className="bottom">
           {books.map((book, index) => (
